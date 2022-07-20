@@ -1,4 +1,5 @@
 library(dplyr)
+library(lubridate)
 
 # user # 1 = kroppheather, 2 = embenson
 userID <- 1
@@ -25,3 +26,15 @@ for(i in 1:6){
 }
 # bind all data frames
 sapflowRaw <- do.call( "rbind", filesIn)
+
+# rename columns and get rid of empty sensor slots
+
+sapflowR <- sapflowRaw[,1:18]
+
+#parse date
+sapflowR$dateF <- ymd_hms(sapflowR$V1)
+sapflowR$year <- year(sapflowR$dateF)
+sapflowR$doy <- yday(sapflowR$dateF)
+sapflowR$hour <- hour(sapflowR$dateF)+(minute(sapflowR$dateF)/60)
+sapflowR$DD <- sapflowR$doy + (sapflowR$hour/24)
+
