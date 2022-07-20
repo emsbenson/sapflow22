@@ -2,14 +2,14 @@ library(dplyr)
 library(lubridate)
 
 # user # 1 = kroppheather, 2 = embenson
-userID <- 1
+userID <- 2
 
 # directory for all sapflow data
 sapDir <- c("e:/Google Drive/research/students/Ecohydro-22/sapflux/Sapflux data",
-            "/User/emilybenson/Desktop/sapflux/campbell/07_20_22")
+            "/Users/emilybenson/Desktop/sapflux/campbell/07_20_22")
 
 fileNames <- c(
-  "Sapflow_Status3.csv.backup",
+  "Sapflow_Status.dat.3.backup",
   "Sapflow_Status.dat.5.backup",
   "Sapflow_Status.dat.7.backup",
   "Sapflow_Status.dat.9.backup",
@@ -31,6 +31,7 @@ sapflowRaw <- do.call( "rbind", filesIn)
 
 sapflowR <- sapflowRaw[,1:18]
 
+
 #parse date
 sapflowR$dateF <- ymd_hms(sapflowR$V1)
 sapflowR$year <- year(sapflowR$dateF)
@@ -38,3 +39,5 @@ sapflowR$doy <- yday(sapflowR$dateF)
 sapflowR$hour <- hour(sapflowR$dateF)+(minute(sapflowR$dateF)/60)
 sapflowR$DD <- sapflowR$doy + (sapflowR$hour/24)
 
+#rename columns
+colnames(sapflowR ) <- c("date","record",paste0("dT",seq(1,16)), "dateF", "year", "doy", "hour", "DD")
